@@ -20,6 +20,14 @@ export const ValidarVotante = () => {
     }
   };
 
+  /* OJO AQUI ESTOY SIMULANDO NO HAY BACKEND NI SOCKETS */
+  const habilitarPapeleta = () => {
+    if (votante) {
+      localStorage.setItem("ci_habilitado", votante.ci);
+      alert("✅ Papeleta habilitada. El votante puede pasar a la cabina.");
+    }
+  };
+
   return (
     <>
       <Header />
@@ -62,6 +70,15 @@ export const ValidarVotante = () => {
                 <p className="text-sm font-medium">Foto votante</p>
                 <img src={votante.foto_votante} alt="Votante" className="w-full h-auto border rounded" />
               </div>
+            </div>
+
+            <div className="mt-6">
+              <button
+                onClick={habilitarPapeleta}
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+              >
+                Habilitar papeleta
+              </button>
             </div>
           </div>
         )}

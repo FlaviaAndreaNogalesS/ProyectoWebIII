@@ -3,8 +3,10 @@ import { useState } from "react";
 import { URLS } from "../navigation/CONTANTS";
 
 const links = [
-  { to: URLS.HOME, label: "Inicio" },
   { to: URLS.VALIDAR_VOTANTE, label: "Validar Votante" },
+  { to: URLS.CABINA, label: "Cabina de Votación" },
+  { to: URLS.ADMIN_MONITOREO, label: "Monitoreo" },
+  { to: URLS.VER_VOTOS, label: "Resultados Públicos" },
 ];
 
 export const Header = () => {
@@ -23,6 +25,7 @@ export const Header = () => {
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="text-xl font-bold">Sistema de Votación</div>
 
+        {/* Menú escritorio */}
         <div className="hidden md:flex gap-4">
           {links.map((link) => (
             <Link
@@ -59,6 +62,7 @@ export const Header = () => {
         </div>
       </div>
 
+      {/* Menú móvil */}
       {menuAbierto && (
         <div className="md:hidden bg-gray-700 px-4 pb-4">
           <div className="flex flex-col gap-2">
