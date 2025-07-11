@@ -1,4 +1,4 @@
-# users/models/refreshtoken.py
+
 from django.db import models
 from django.utils import timezone
 from .usuario import User

@@ -17,7 +17,7 @@ export const UsuarioForm = ({ onSubmit, defaultValues }: Props) => {
       <input {...register("email")} placeholder="Email" className="border p-2 w-full" />
       <input {...register("first_name")} placeholder="Nombre" className="border p-2 w-full" />
       <input {...register("last_name")} placeholder="Apellido" className="border p-2 w-full" />
-      <select {...register("rol")} className="border p-2 w-full">
+      <select {...register("role")} className="border p-2 w-full">
         <option value="superadmin">Superadmin</option>
         <option value="padron">Administrador de Padrón</option>
         <option value="eleccion">Administrador de Elecciones</option>

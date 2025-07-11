@@ -1,4 +1,4 @@
-# users/views/register_view.py
+
 from rest_framework import mixins, viewsets
 from users.serializers.register import RegisterSerializer
 from rest_framework.permissions import AllowAny

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { UsuarioService } from "../services/UsuarioService";
 import type { Usuario } from "../models/Usuario";
+import { Header } from "../components/Header";
 
 type Inputs = {
   id?: string;
@@ -80,6 +81,8 @@ export const AdminUsuarios = () => {
   }, []);
 
   return (
+    <>
+    <Header/>
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">
         {modoEdicion ? "Editar usuario" : "Crear nuevo usuario"}
@@ -146,5 +149,6 @@ export const AdminUsuarios = () => {
         </table>
       </div>
     </div>
+        </>
   );
 };

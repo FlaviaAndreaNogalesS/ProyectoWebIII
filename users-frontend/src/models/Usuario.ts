@@ -4,5 +4,6 @@ export interface Usuario {
   email: string;
   first_name: string;
   last_name: string;
+  password: string;
   role: 'superadmin' | 'admin_padron' | 'admin_elecciones' | 'jurado';
 }
