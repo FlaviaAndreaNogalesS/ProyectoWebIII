@@ -8,17 +8,15 @@ import { URLS } from "../navigation/CONTANTS";
 import { type LoginRequest } from "../models/dto/LoginRequest";
 import { AuthService } from "../services/AuthService";
 import { Container } from "../components/Container";
-//import { useAuth } from "../hooks/useAuth";
 import { GuestMenu } from "../components/GuestMenu";
 
 type Inputs = {
-  email: string;
+  username: string;
   password: string;
 };
 
 export const LoginForm = () => {
   const navigate = useNavigate();
-  //const { doLogin } = useAuth(); // Guarda los tokens y email
 
   const {
     register,
@@ -28,14 +26,13 @@ export const LoginForm = () => {
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const login: LoginRequest = {
-      username: data.email, // si usas el email como username en backend
+      username: data.username,
       password: data.password,
     };
 
     new AuthService()
       .login(login.username, login.password)
       .then((response) => {
-        console.log("Login successful", response);
         localStorage.setItem("access_token", response.access);
         localStorage.setItem("refresh_token", response.refresh);
         navigate(URLS.USUARIOS_ADMIN);
@@ -53,9 +50,9 @@ export const LoginForm = () => {
         <Card title="Iniciar sesión" className="mx-5 my-5">
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormField>
-              <label htmlFor="email">Usuario:</label>
-              <Input type="text" id="email" {...register("email", { required: true })} />
-              {errors.email && <span className="text-red-500 text-sm">Este campo es requerido</span>}
+              <label htmlFor="username">Usuario:</label>
+              <Input type="text" id="username" {...register("username", { required: true })} />
+              {errors.username && <span className="text-red-500 text-sm">Este campo es requerido</span>}
             </FormField>
             <FormField>
               <label htmlFor="password">Contraseña:</label>

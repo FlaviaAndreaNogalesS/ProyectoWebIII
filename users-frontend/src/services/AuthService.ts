@@ -9,7 +9,7 @@ export class AuthService {
 
     login(username: string, password: string): Promise<LoginResponse> {
         return new Promise<LoginResponse>((resolve, reject) => {
-            axios.post("http://localhost:8000/api/login/", {
+            axios.post("http://localhost:8000/api/users/token/", {
               username,
               password
             }).then((response) => {
@@ -31,7 +31,8 @@ export class AuthService {
 
     register(email: string, password: string): Promise<RegisterResponse> {
         return new Promise<RegisterResponse>((resolve, reject) => {
-            axios.post("http://localhost:8000/usuarios/auth/registrar/", {
+            axios.post("http://localhost:8000/api/users/register/", {
+
                 email,
                 password
             }).then((response) => {
@@ -44,7 +45,7 @@ export class AuthService {
 
     me(): Promise<UserInfoResponse> {
     return new Promise<UserInfoResponse>((resolve, reject) => {
-      apiClient.get("usuarios/auth/me/") // Ruta protegida en Django
+      apiClient.get("users/me/") // Ruta protegida en Django
         .then((response) => {
           resolve(response.data);
         })

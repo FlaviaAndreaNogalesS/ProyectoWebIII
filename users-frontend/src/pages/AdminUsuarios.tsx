@@ -4,13 +4,13 @@ import { UsuarioService } from "../services/UsuarioService";
 import type { Usuario } from "../models/Usuario";
 
 type Inputs = {
-  id?: number;
+  id?: string;
   username: string;
   email: string;
   first_name: string;
   last_name: string;
   password?: string;
-  rol: "superadmin" | "padron" | "eleccion" | "jurado";
+  role: "superadmin" | "admin_padron" | "admin_elecciones" | "jurado";
 };
 
 export const AdminUsuarios = () => {
@@ -24,45 +24,41 @@ export const AdminUsuarios = () => {
   };
 
   const onSubmit = (data: Inputs) => {
-  if (modoEdicion && data.id) {
-    const datosFinales: Partial<Usuario> = {
-      username: data.username,
-      email: data.email,
-      first_name: data.first_name,
-      last_name: data.last_name,
-      rol: data.rol,
-    };
+    if (modoEdicion && data.id) {
+      const datosFinales: Partial<Usuario> = {
+        username: data.username,
+        email: data.email,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        role: data.role,
+      };
 
-    service.actualizar(data.id, datosFinales)
-  .then(() => {
-    cargar();
-    reset();
-    setModoEdicion(false);
-  })
-  .catch((error) => {
-    console.error("ERROR AL ACTUALIZAR USUARIO:", error.response?.data);
-    alert("Ocurrió un error al actualizar el usuario. Revisa consola.");
-  });
+      service.actualizar(data.id, datosFinales)
+        .then(() => {
+          cargar();
+          reset();
+          setModoEdicion(false);
+        })
+        .catch((error) => {
+          console.error("ERROR AL ACTUALIZAR USUARIO:", error.response?.data);
+          alert("Ocurrió un error al actualizar el usuario. Revisa consola.");
+        });
+    } else {
+      const datosFinales = {
+        username: data.username,
+        email: data.email,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        role: data.role,
+        password: data.password || "1234",
+      };
 
-
-
-  } else {
-    // En creación sí mandamos password
-    const datosFinales = {
-      username: data.username,
-      email: data.email,
-      first_name: data.first_name,
-      last_name: data.last_name,
-      rol: data.rol,
-      password: data.password || "1234",
-    };
-
-    service.crear(datosFinales).then(() => {
-      cargar();
-      reset();
-    });
-  }
-};
+      service.crear(datosFinales).then(() => {
+        cargar();
+        reset();
+      });
+    }
+  };
 
   const onEditar = (usuario: Usuario) => {
     setModoEdicion(true);
@@ -71,7 +67,7 @@ export const AdminUsuarios = () => {
     setValue("email", usuario.email);
     setValue("first_name", usuario.first_name);
     setValue("last_name", usuario.last_name);
-    setValue("rol", usuario.rol);
+    setValue("role", usuario.role);
   };
 
   const onCancelar = () => {
@@ -98,11 +94,11 @@ export const AdminUsuarios = () => {
           {!modoEdicion && (
             <input type="password" placeholder="Contraseña" {...register("password", { required: true })} className="border p-2" />
           )}
-          <select {...register("rol", { required: true })} className="border p-2">
+          <select {...register("role", { required: true })} className="border p-2">
             <option value="">Seleccione un rol</option>
             <option value="superadmin">Super Admin</option>
-            <option value="padron">Padron</option>
-            <option value="eleccion">Elección</option>
+            <option value="admin_padron">Administrador del Padrón</option>
+            <option value="admin_elecciones">Administrador de Elecciones</option>
             <option value="jurado">Jurado</option>
           </select>
         </div>
@@ -120,46 +116,35 @@ export const AdminUsuarios = () => {
       </form>
 
       <h2 className="text-xl font-bold mb-4">Usuarios registrados</h2>
-<div className="overflow-x-auto shadow rounded-lg">
-  <table className="min-w-full divide-y divide-gray-200">
-    <thead className="bg-blue-600">
-      <tr>
-        <th className="px-4 py-2 text-left text-sm font-semibold text-white">Usuario</th>
-        <th className="px-4 py-2 text-left text-sm font-semibold text-white">Email</th>
-        <th className="px-4 py-2 text-left text-sm font-semibold text-white">Nombre completo</th>
-        <th className="px-4 py-2 text-left text-sm font-semibold text-white">Rol</th>
-        <th className="px-4 py-2 text-left text-sm font-semibold text-white">Acciones</th>
-      </tr>
-    </thead>
-    <tbody className="divide-y divide-gray-100 bg-white">
-      {usuarios.map((u) => (
-        <tr key={u.id} className="hover:bg-gray-50">
-          <td className="px-4 py-2 text-sm text-gray-800">{u.username}</td>
-          <td className="px-4 py-2 text-sm text-gray-800">{u.email}</td>
-          <td className="px-4 py-2 text-sm text-gray-800">
-            {u.first_name} {u.last_name}
-          </td>
-          <td className="px-4 py-2 text-sm capitalize text-gray-800">{u.rol}</td>
-          <td className="px-4 py-2 space-x-2">
-            <button
-              onClick={() => onEditar(u)}
-              className="bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-3 py-1 rounded"
-            >
-            Editar
-            </button>
-            <button
-              onClick={() => service.eliminar(u.id).then(cargar)}
-              className="bg-red-600 hover:bg-red-700 text-white text-sm px-3 py-1 rounded"
-            >
-            Eliminar
-            </button>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
-
+      <div className="overflow-x-auto shadow rounded-lg">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-blue-600">
+            <tr>
+              <th className="px-4 py-2 text-left text-sm font-semibold text-white">Usuario</th>
+              <th className="px-4 py-2 text-left text-sm font-semibold text-white">Email</th>
+              <th className="px-4 py-2 text-left text-sm font-semibold text-white">Nombre completo</th>
+              <th className="px-4 py-2 text-left text-sm font-semibold text-white">Rol</th>
+              <th className="px-4 py-2 text-left text-sm font-semibold text-white">Acciones</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100 bg-white">
+            {usuarios.map((u) => (
+              <tr key={u.id} className="hover:bg-gray-50">
+                <td className="px-4 py-2 text-sm text-gray-800">{u.username}</td>
+                <td className="px-4 py-2 text-sm text-gray-800">{u.email}</td>
+                <td className="px-4 py-2 text-sm text-gray-800">
+                  {u.first_name} {u.last_name}
+                </td>
+                <td className="px-4 py-2 text-sm capitalize text-gray-800">{u.role}</td>
+                <td className="px-4 py-2 space-x-2">
+                  <button onClick={() => onEditar(u)} className="bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-3 py-1 rounded">Editar</button>
+                  <button onClick={() => service.eliminar(u.id).then(cargar)} className="bg-red-600 hover:bg-red-700 text-white text-sm px-3 py-1 rounded">Eliminar</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

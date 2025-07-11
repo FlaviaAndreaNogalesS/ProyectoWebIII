@@ -1,8 +1,8 @@
 export interface Usuario {
-  id: number;
+  id: string;
   username: string;
   email: string;
   first_name: string;
   last_name: string;
-  rol: 'superadmin' | 'padron' | 'eleccion' | 'jurado';
+  role: 'superadmin' | 'admin_padron' | 'admin_elecciones' | 'jurado';
 }
