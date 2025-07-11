@@ -1,4 +1,4 @@
-import type { Seccion} from "../models/Seccion";
+import type {Seccion} from "../models/Seccion";
 
 export class SeccionService {
   private storageKey = "secciones_mapa";

@@ -9,4 +9,5 @@ export const URLS = {
   CANDIDATURAS_ADMIN: "/admin/candidaturas",
   PAPELETA: "/admin/papeleta",
   SECCIONES_ADMIN: "/admin/secciones",
+  USUARIOS_ADMIN: "/admin/usuarios"
 };

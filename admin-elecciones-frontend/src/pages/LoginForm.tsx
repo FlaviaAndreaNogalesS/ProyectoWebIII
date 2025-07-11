@@ -1,24 +1,23 @@
+import { useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "../components/Input";
 import { FormField } from "../components/FormField";
-import { Card } from '../components/Card';
+import { Card } from "../components/Card";
 import { Button } from "../components/Button";
 import { useNavigate } from "react-router";
 import { URLS } from "../navigation/CONTANTS";
 import { type LoginRequest } from "../models/dto/LoginRequest";
 import { AuthService } from "../services/AuthService";
 import { Container } from "../components/Container";
-//import { useAuth } from "../hooks/useAuth";
-import { GuestMenu } from "../components/GuestMenu";
 
 type Inputs = {
-  email: string;
+  username: string;
   password: string;
 };
 
 export const LoginForm = () => {
   const navigate = useNavigate();
-  //const { doLogin } = useAuth(); // Guarda los tokens y email
+  const [errorLogin, setErrorLogin] = useState(""); // Estado para mostrar error
 
   const {
     register,
@@ -27,53 +26,60 @@ export const LoginForm = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+    setErrorLogin(""); // limpiamos errores anteriores
+
     const login: LoginRequest = {
-      username: data.email, // si usas el email como username en backend
+      username: data.username,
       password: data.password,
     };
 
-    new AuthService()
-  .login(login.username, login.password)
-  .then((response) => {
-    localStorage.setItem("access_token", response.access);
-    localStorage.setItem("refresh_token", response.refresh);
+    const auth = new AuthService();
 
-    // Obtener info del usuario y redirigir por rol
-    new AuthService().me().then((userInfo) => {
-      const rol = userInfo.rol;
+    auth
+      .login(login.username, login.password)
+      .then((response) => {
+        localStorage.setItem("access_token", response.access);
+        localStorage.setItem("refresh_token", response.refresh);
 
-      if (rol === "superadmin") {
-        navigate(URLS.USUARIOS_ADMIN);
-      } else if (rol === "padron") {
-        navigate(URLS.ADMIN_PADRON);
-      } else {
-        alert("Rol no autorizado para ingresar.");
-      }
-    });
-  })
-  .catch((error) => {
-    alert("Credenciales inválidas");
-    console.error("Login error:", error.message);
-  });
-
+        // Verificar rol
+        auth.me().then((user) => {
+          if (user.role === "admin_elecciones") {
+            navigate(URLS.ELECCIONES_ADMIN);
+          } else {
+            setErrorLogin("⚠️ Solo los Administradores de Elecciones pueden acceder a esta sección.");
+          }
+        });
+      })
+      .catch(() => {
+        setErrorLogin("⚠️ Usuario o contraseña incorrectos. Intenta nuevamente.");
+      });
   };
 
   return (
     <>
-      <GuestMenu />
       <Container>
         <Card title="Iniciar sesión" className="mx-5 my-5">
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormField>
-              <label htmlFor="email">Usuario:</label>
-              <Input type="text" id="email" {...register("email", { required: true })} />
-              {errors.email && <span className="text-red-500 text-sm">Este campo es requerido</span>}
+              <label htmlFor="username">Usuario:</label>
+              <Input type="text" id="username" {...register("username", { required: true })} />
+              {errors.username && (
+                <span className="text-red-500 text-sm">Este campo es requerido</span>
+              )}
             </FormField>
+
             <FormField>
               <label htmlFor="password">Contraseña:</label>
               <Input type="password" id="password" {...register("password", { required: true })} />
-              {errors.password && <span className="text-red-500 text-sm">Este campo es requerido</span>}
+              {errors.password && (
+                <span className="text-red-500 text-sm">Este campo es requerido</span>
+              )}
             </FormField>
+
+            {errorLogin && (
+              <p className="text-red-600 text-sm mt-2 font-medium">{errorLogin}</p>
+            )}
+
             <Button type="submit" title="Ingresar" />
           </form>
         </Card>
