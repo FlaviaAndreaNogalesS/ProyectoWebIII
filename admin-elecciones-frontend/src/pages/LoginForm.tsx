@@ -36,23 +36,25 @@ export const LoginForm = () => {
     const auth = new AuthService();
 
     auth
-      .login(login.username, login.password)
-      .then((response) => {
-        localStorage.setItem("access_token", response.access);
-        localStorage.setItem("refresh_token", response.refresh);
+  .login(login.username, login.password)
+  .then((response) => {
+    localStorage.setItem("elec_access_token", response.access);
+    localStorage.setItem("elec_refresh_token", response.refresh);
 
-        // Verificar rol
-        auth.me().then((user) => {
-          if (user.role === "admin_elecciones") {
-            navigate(URLS.ELECCIONES_ADMIN);
-          } else {
-            setErrorLogin("⚠️ Solo los Administradores de Elecciones pueden acceder a esta sección.");
-          }
-        });
-      })
-      .catch(() => {
-        setErrorLogin("⚠️ Usuario o contraseña incorrectos. Intenta nuevamente.");
-      });
+    auth.me().then((user) => {
+      if (user.role === "admin_elecciones") {
+        // ✅ NO redirigir aún
+        console.log("✅ Login exitoso como admin_elecciones:", user);
+        setErrorLogin("✅ Bienvenido, " + user.role); // muestra mensaje en pantalla
+      } else {
+        setErrorLogin("⚠️ Solo los Administradores de Elecciones pueden acceder a esta sección.");
+      }
+    });
+  })
+  .catch(() => {
+    setErrorLogin("⚠️ Usuario o contraseña incorrectos. Intenta nuevamente.");
+  });
+
   };
 
   return (

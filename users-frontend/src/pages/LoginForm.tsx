@@ -39,9 +39,8 @@ export const LoginForm = () => {
     auth
       .login(login.username, login.password)
       .then((response) => {
-        localStorage.setItem("access_token", response.access);
-        localStorage.setItem("refresh_token", response.refresh);
-
+        localStorage.setItem("auth_access_token", response.access);
+        localStorage.setItem("auth_refresh_token", response.refresh);
         // Verificar rol
         auth.me().then((user) => {
           if (user.role === "superadmin") {

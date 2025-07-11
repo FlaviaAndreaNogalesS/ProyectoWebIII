@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from django.urls import path
+
 from elecciones.views import EleccionViewSet, TipoEleccionViewSet
 from elecciones.views.recintos_view import RecintoViewSet
 from elecciones.views.mesas_view import MesaViewSet
@@ -22,7 +22,4 @@ router.register(r'jurados', JuradoViewSet)
 router.register(r'papeletas', PapeletaViewSet)
 router.register(r'tipos-eleccion', TipoEleccionViewSet)
 
-
-urlpatterns = router.urls + [
-    path('me/', MeView.as_view(), name='me'),  # 👈 agrega esta línea
-]
+urlpatterns = router.urls

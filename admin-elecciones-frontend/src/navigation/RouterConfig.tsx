@@ -9,6 +9,8 @@ import { AsignarJurados } from "../pages/AsignarJurados";
 import { AdminCandidaturas } from "../pages/AdminCandidaturas";
 import { Papeleta } from "../pages/Papeleta";
 import { AdminSecciones } from "../pages/AdminSecciones";
+import { AdminTipoEleccion } from "../pages/AdminTipoEleccion";
+
 
 const RouterConfig = () => (
   <Routes>
@@ -21,6 +23,8 @@ const RouterConfig = () => (
     <Route path={URLS.CANDIDATURAS_ADMIN} element={<AdminCandidaturas />} />
     <Route path={URLS.PAPELETA} element={<Papeleta />} />
     <Route path={URLS.SECCIONES_ADMIN} element={<AdminSecciones />} />
+    <Route path={URLS.TIPO_ELECCION_ADMIN} element={<AdminTipoEleccion />} />
+
   </Routes>
 );
 
